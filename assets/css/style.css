@@ -1,0 +1,531 @@
+/* ============================================================
+   이성현 — 프로덕트 디자이너 이력서
+   ------------------------------------------------------------
+   콘셉트: 「측정」
+   이 이력서의 모든 성과는 기준점에서 얼마나 움직였는가로 서술됩니다.
+   그래서 페이지의 유일한 강한 장치는 눈금이 새겨진 계측선입니다.
+   나머지 요소는 전부 조용하게 두어 계측선이 혼자 기억되게 합니다.
+   ============================================================ */
+
+:root {
+  --paper:      #E9EAE5;
+  --paper-deep: #DFE1DA;
+  --ink:        #16243A;
+  --ink-soft:   #52607A;
+  --mark:       #B63A2B;
+  --rule:       #C3C7BD;
+
+  --display: "Gothic A1", system-ui, sans-serif;
+  --text:    "IBM Plex Sans KR", system-ui, sans-serif;
+
+  --measure: 60ch;
+  --gutter:  clamp(1.5rem, 6vw, 5rem);
+}
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--text);
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+:focus-visible {
+  outline: 2px solid var(--mark);
+  outline-offset: 3px;
+}
+
+.page {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: clamp(3.5rem, 12vw, 8rem) var(--gutter) 0;
+}
+
+
+/* ─────────────────────────────────────────────
+   첫 화면
+   ───────────────────────────────────────────── */
+
+.lede {
+  padding-bottom: clamp(4rem, 10vw, 7rem);
+}
+
+.lede__name {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: clamp(3.25rem, 13vw, 7rem);
+  line-height: 0.88;
+  letter-spacing: -0.035em;
+  margin: 0;
+}
+
+.lede__role {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: clamp(1.05rem, 3vw, 1.35rem);
+  letter-spacing: 0.01em;
+  color: var(--ink-soft);
+  margin: 0.9rem 0 0;
+}
+
+.lede__claim {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: clamp(1.45rem, 4.4vw, 2.35rem);
+  line-height: 1.35;
+  letter-spacing: -0.02em;
+  max-width: 24ch;
+  margin: clamp(2.5rem, 7vw, 4rem) 0 0;
+}
+
+
+/* ─────────────────────────────────────────────
+   계측선 — 이 페이지의 유일한 강한 장치
+   ───────────────────────────────────────────── */
+
+.deltas {
+  margin-top: clamp(3rem, 8vw, 4.5rem);
+  display: grid;
+  gap: clamp(2rem, 5vw, 2.75rem);
+  max-width: 44rem;
+}
+
+.delta {
+  display: grid;
+  grid-template-columns: 6.5rem minmax(0, 1fr);
+  gap: 0 1.75rem;
+  align-items: start;
+}
+
+.delta__value {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: clamp(1.9rem, 5.5vw, 2.6rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  color: var(--mark);
+  padding-top: 0.15em;
+}
+
+.delta__unit {
+  font-size: 0.55em;
+  margin-left: 0.06em;
+  vertical-align: 0.42em;
+}
+
+.delta__label {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 1.0625rem;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.85rem;
+}
+
+.delta__note {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  margin: 0.85rem 0 0;
+  max-width: 34ch;
+}
+
+/* 눈금자 */
+.delta__ruler {
+  position: relative;
+  height: 1.75rem;
+}
+
+/* 10%마다 눈금이 그어진 기준선 */
+.delta__scale {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 0.5rem;
+  border-bottom: 1px solid var(--rule);
+  background-image: repeating-linear-gradient(
+    to right,
+    var(--rule) 0 1px,
+    transparent 1px 10%
+  );
+}
+
+/* 기준점에서 도달점까지의 굵은 선 */
+.delta__reach {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: var(--reach);
+  border-bottom: 2px solid var(--ink);
+}
+
+/* 도달점 표시 */
+.delta__mark {
+  position: absolute;
+  left: var(--reach);
+  bottom: 0;
+  width: 2px;
+  height: 1.5rem;
+  background: var(--mark);
+}
+
+.delta__mark::after {
+  content: "";
+  position: absolute;
+  top: -0.3rem;
+  left: 50%;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--mark);
+  transform: translateX(-50%);
+}
+
+/* 유일한 자동 움직임: 도달점이 기준점에서 한 번 이동합니다.
+   자바스크립트가 꺼져 있거나 움직임 최소화 설정이면 처음부터 제자리에 있습니다. */
+.js-motion .delta__reach,
+.js-motion .delta__mark {
+  transition: width 900ms cubic-bezier(0.16, 1, 0.3, 1),
+              left  900ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.js-motion:not(.is-measured) .delta__reach { width: 0; }
+.js-motion:not(.is-measured) .delta__mark  { left: 0; }
+
+.js-motion .delta:nth-child(2) .delta__reach,
+.js-motion .delta:nth-child(2) .delta__mark { transition-delay: 120ms; }
+
+.js-motion .delta:nth-child(3) .delta__reach,
+.js-motion .delta:nth-child(3) .delta__mark { transition-delay: 240ms; }
+
+
+/* ─────────────────────────────────────────────
+   본문 구획
+   ───────────────────────────────────────────── */
+
+.block {
+  display: grid;
+  grid-template-columns: 9rem minmax(0, 1fr);
+  gap: 0 3rem;
+  padding-block: clamp(2.75rem, 7vw, 4.25rem);
+  border-top: 1px solid var(--rule);
+}
+
+.block__title {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 1.0625rem;
+  letter-spacing: -0.01em;
+  color: var(--ink-soft);
+  margin: 0;
+  padding-top: 0.25rem;
+}
+
+.block__body { max-width: var(--measure); }
+
+.prose {
+  margin: 0 0 1.1rem;
+}
+
+.prose:last-child { margin-bottom: 0; }
+
+
+/* ─────────────────────────────────────────────
+   경력 — 연대순이므로 세로 레일을 씁니다
+   ───────────────────────────────────────────── */
+
+.track {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 1.75rem;
+  border-left: 1px solid var(--rule);
+}
+
+.job {
+  position: relative;
+  padding-bottom: 2.75rem;
+}
+
+.job:last-child { padding-bottom: 0; }
+
+.job::before {
+  content: "";
+  position: absolute;
+  left: -2.05rem;
+  top: 0.7rem;
+  width: 0.4375rem;
+  height: 0.4375rem;
+  border-radius: 50%;
+  background: var(--ink);
+}
+
+.job__head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.job__org {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: clamp(1.35rem, 3.6vw, 1.75rem);
+  letter-spacing: -0.025em;
+  margin: 0;
+}
+
+.job__state {
+  font-size: 0.8125rem;
+  color: var(--ink-soft);
+}
+
+.job__state--now {
+  color: var(--mark);
+  font-weight: 600;
+}
+
+.job__scope {
+  color: var(--ink-soft);
+  font-size: 0.9375rem;
+  margin: 0.35rem 0 1.4rem;
+}
+
+.facts {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.fact {
+  display: grid;
+  grid-template-columns: 4rem minmax(0, 1fr);
+  gap: 0 1rem;
+  align-items: baseline;
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+.fact--plain {
+  grid-template-columns: minmax(0, 1fr);
+  padding-left: 5rem;
+}
+
+.fact__num {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: 1.0625rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  color: var(--mark);
+  text-align: right;
+}
+
+
+/* ─────────────────────────────────────────────
+   프로젝트
+   ───────────────────────────────────────────── */
+
+.works {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 2.25rem;
+}
+
+.work__name {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 1.1875rem;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.45rem;
+}
+
+.work__desc {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.9375rem;
+  line-height: 1.7;
+}
+
+.work__result {
+  margin: 0.7rem 0 0;
+  font-size: 0.9375rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.work__num {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: 1.0625rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  color: var(--mark);
+}
+
+
+/* ─────────────────────────────────────────────
+   역량
+   ───────────────────────────────────────────── */
+
+.skills {
+  margin: 0;
+  display: grid;
+  grid-template-columns: 9rem minmax(0, 1fr);
+  gap: 0.8rem 1.5rem;
+  align-items: baseline;
+}
+
+.skills__area {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 0.9375rem;
+  color: var(--ink-soft);
+  margin: 0;
+}
+
+.skills__list {
+  margin: 0;
+  font-size: 1rem;
+}
+
+
+/* ─────────────────────────────────────────────
+   학력
+   ───────────────────────────────────────────── */
+
+.school {
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+}
+
+.school__name {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: 1.25rem;
+  letter-spacing: -0.02em;
+}
+
+.school__major {
+  color: var(--ink-soft);
+  font-size: 0.9375rem;
+}
+
+
+/* ─────────────────────────────────────────────
+   연락
+   ───────────────────────────────────────────── */
+
+.close {
+  border-top: 1px solid var(--rule);
+  padding-block: clamp(3.5rem, 9vw, 6rem);
+  display: grid;
+  justify-items: start;
+  gap: 0.9rem;
+}
+
+.close__line {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.9375rem;
+}
+
+.close__mail {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: clamp(1.4rem, 5vw, 2.4rem);
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 3px solid var(--mark);
+  padding-bottom: 0.1em;
+  word-break: break-all;
+}
+
+.close__mail:hover { color: var(--mark); }
+
+.close__sub {
+  font-size: 0.9375rem;
+  color: var(--ink-soft);
+  text-decoration: none;
+  border-bottom: 1px solid var(--rule);
+}
+
+.close__sub:hover {
+  color: var(--ink);
+  border-bottom-color: var(--ink);
+}
+
+
+/* ─────────────────────────────────────────────
+   좁은 화면
+   ───────────────────────────────────────────── */
+
+@media (max-width: 46rem) {
+  .block {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.25rem 0;
+  }
+
+  .block__title { padding-top: 0; }
+
+  .delta {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.5rem 0;
+  }
+
+  .delta__value { padding-top: 0; }
+
+  .skills { grid-template-columns: minmax(0, 1fr); gap: 0.2rem 0; }
+  .skills__list { margin-bottom: 0.9rem; }
+
+  .fact { grid-template-columns: 3.25rem minmax(0, 1fr); gap: 0 0.75rem; }
+  .fact--plain { grid-template-columns: minmax(0, 1fr); padding-left: 4rem; }
+}
+
+
+/* ─────────────────────────────────────────────
+   인쇄 — 채용 담당자는 이력서를 종이로 뽑습니다
+   ───────────────────────────────────────────── */
+
+@media print {
+  :root { --paper: #fff; }
+
+  body { font-size: 10.5pt; line-height: 1.55; }
+
+  .page { padding: 0; max-width: none; }
+
+  .lede { padding-bottom: 1.5rem; }
+  .lede__name { font-size: 30pt; }
+  .lede__claim { font-size: 13pt; margin-top: 1rem; }
+
+  .deltas { margin-top: 1.25rem; gap: 0.75rem; }
+  .delta__ruler { display: none; }
+  .delta__note { margin-top: 0.2rem; }
+
+  .block { padding-block: 1rem; break-inside: avoid; }
+  .job { break-inside: avoid; padding-bottom: 1rem; }
+  .work { break-inside: avoid; }
+
+  .close { padding-block: 1.25rem; }
+  .close__mail { font-size: 13pt; border-bottom-width: 2px; }
+}
